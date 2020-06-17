@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Goal } from '../goal';
 import { GoalService } from '../goal-service/goal.service';
 import { AlertService } from '../alert-service/alert.service';
+import { Quote } from '../quote-class/quote';
+import { QuoteRequestService } from '../quote-http/quote-request.service';
 
 @Component({
   selector: 'app-goal',
@@ -11,8 +14,8 @@ import { AlertService } from '../alert-service/alert.service';
 export class GoalComponent implements OnInit {
 
   goals: Goal[];
-
   alertService: AlertService;
+  quote: Quote;
 
   toggleDetails(index) {
     this.goals[index].showDescription = !this.goals[index].showDescription;
@@ -42,13 +45,16 @@ export class GoalComponent implements OnInit {
     this.goals.push(goal)
   }
 
-  constructor(goalService: GoalService) {
+  constructor(goalService: GoalService, alertService: AlertService, private quoteService: QuoteRequestService) {
     // tslint:disable-next-line: semicolon
     this.goals = goalService.getGoals()
-    this.alertService = this.alertService;
+    this.alertService = alertService;
   }
 
   ngOnInit() {
+    // tslint:disable-next-line: semicolon
+    this.quoteService.quoteRequest()
+    // tslint:disable-next-line: semicolon
+    this.quote = this.quoteService.quote
   }
-
 }
